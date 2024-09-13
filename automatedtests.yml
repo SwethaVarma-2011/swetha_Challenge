@@ -1,0 +1,12 @@
+- name: Check if Nginx is running
+  command: systemctl status nginx
+  register: nginx_status
+  changed_when: false
+  failed_when: "'running' not in nginx_status.stdout"
+
+- name: Validate HTTP to HTTPS redirection
+  uri:
+    url: http://example.com
+    follow_redirects: none
+  register: result
+  failed_when: "'301' not in result.status"
